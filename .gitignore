@@ -1,0 +1,7 @@
+node_modules/
+/.cache
+reports/
+.idea/
+.vscode/
+playwright-report/
+npm-debug.log
