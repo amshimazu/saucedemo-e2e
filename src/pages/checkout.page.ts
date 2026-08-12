@@ -1,7 +1,14 @@
-const BasePage = require('./base.page');
+import BasePage from './base.page';
 
-class CheckoutPage extends BasePage {
-  constructor(page) {
+export default class CheckoutPage extends BasePage {
+  firstName: string;
+  lastName: string;
+  postalCode: string;
+  continueButton: string;
+  finishButton: string;
+  completeHeader: string;
+
+  constructor(page: any) {
     super(page);
     this.firstName = '[data-test="firstName"]';
     this.lastName = '[data-test="lastName"]';
@@ -11,7 +18,7 @@ class CheckoutPage extends BasePage {
     this.completeHeader = '.complete-header';
   }
 
-  async fillCheckoutInfo(first, last, zip) {
+  async fillCheckoutInfo(first: string, last: string, zip: string) {
     await this.page.fill(this.firstName, first);
     await this.page.fill(this.lastName, last);
     await this.page.fill(this.postalCode, zip);
@@ -23,11 +30,9 @@ class CheckoutPage extends BasePage {
     try {
       await this.page.waitForSelector(this.completeHeader, { timeout: 5000 });
       const txt = await this.page.textContent(this.completeHeader);
-      return txt && txt.trim().length > 0;
+      return !!(txt && txt.trim().length > 0);
     } catch (e) {
       return false;
     }
   }
 }
-
-module.exports = CheckoutPage;

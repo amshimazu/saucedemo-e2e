@@ -1,7 +1,13 @@
-const BasePage = require('./base.page');
+import BasePage from './base.page';
 
-class LoginPage extends BasePage {
-  constructor(page) {
+export default class LoginPage extends BasePage {
+  url: string;
+  username: string;
+  password: string;
+  loginButton: string;
+  error: string;
+
+  constructor(page: any) {
     super(page);
     this.url = 'https://www.saucedemo.com/';
     this.username = '#user-name';
@@ -14,7 +20,7 @@ class LoginPage extends BasePage {
     await this.goto(this.url);
   }
 
-  async login(user, pass) {
+  async login(user: string, pass: string) {
     await this.page.fill(this.username, user);
     await this.page.fill(this.password, pass);
     await this.page.click(this.loginButton);
@@ -29,5 +35,3 @@ class LoginPage extends BasePage {
     }
   }
 }
-
-module.exports = LoginPage;

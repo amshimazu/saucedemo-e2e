@@ -4,7 +4,12 @@
   "description": "Playwright + Cucumber E2E tests for Sauce Demo",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js --require ./features/support/**/*.js --require ./features/steps/**/*.js features",
+    "test": "cucumber-js --profile default",
+    "prepare-reports": "node -e \"require('fs').mkdirSync('reports', { recursive: true })\"",
+    "test:chromium": "set \"BROWSER=chromium\" && npm test",
+    "test:firefox": "set \"BROWSER=firefox\" && npm test",
+    "test:edge": "set \"BROWSER=edge\" && npm test",
+    "posttest": "node scripts/generate-html-report.js",
     "install-browsers": "npx playwright install"
   },
   "keywords": [],
@@ -12,7 +17,17 @@
   "license": "MIT",
   "dependencies": {
     "@cucumber/cucumber": "^9.0.0",
+    "@cucumber/html-formatter": "^9.0.0",
     "chai": "^4.3.7",
     "playwright": "^1.35.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.3",
+    "@types/node": "^26.2.0",
+    "cucumber-html-reporter": "^5.4.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }

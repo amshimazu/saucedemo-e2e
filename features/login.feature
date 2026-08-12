@@ -1,14 +1,15 @@
- # language: es
+# language: es
 
 Característica: Inicio de sesión en Sauce Demo
 
   Antecedentes:
     Dado abro la página de login de Sauce Demo
 
-  Escenario: Inicio de sesión con credenciales válidas
-    Cuando inicio sesión con "standard_user" y "secret_sauce"
-    Entonces debería ver la página de productos
+  Esquema del escenario: Inicio de sesión con credenciales variadas
+    Cuando inicio sesión con "<username>" y "<password>"
+    Entonces debería ver "<resultado>"
 
-  Escenario: Inicio de sesión con credenciales inválidas (locked out)
-    Cuando inicio sesión con "locked_out_user" y "secret_sauce"
-    Entonces debería ver un mensaje de error
+    Ejemplos:
+      | username        | password      | resultado                    |
+      | standard_user   | secret_sauce | la página de productos      |
+      | locked_out_user | secret_sauce | un mensaje de error         |

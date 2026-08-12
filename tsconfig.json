@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "strict": false,
+    "noImplicitThis": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node", "chai"]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "reports"
+  ]
+}

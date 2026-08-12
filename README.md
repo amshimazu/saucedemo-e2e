@@ -21,35 +21,57 @@ npm run install-browsers
 Ejecutar los tests
 - Ejecutar un feature específico:
 ```powershell
-npm.cmd test -- features/login.feature
+npm test -- features/login.feature
 ```
 - Ejecutar todos los features:
 ```powershell
-npm.cmd test
+npm test
+```
+- Ejecutar en Chromium:
+```powershell
+npm run test:chromium
+```
+- Ejecutar en Firefox:
+```powershell
+npm run test:firefox
+```
+- Ejecutar en Edge:
+```powershell
+npm run test:edge
+```
+- Generar el reporte HTML y JSON automáticamente después de cada ejecución:
+```powershell
+npm test
+```
+- Abrir el reporte HTML generado:
+```powershell
+start reports\cucumber-report.html
 ```
 
 Control del modo de ejecución
-- El comportamiento por defecto se controla directamente en el archivo `features/support/hooks.js` mediante las constantes:
+- El comportamiento por defecto se controla en `src/support/hooks.ts` mediante las constantes:
 	- `const HEADLESS_MODE = false;` → dejar `false` para abrir la UI (headful).
-	- `const DEFAULT_SLOW_MO = 0;` → milisegundos entre acciones (poner 300/500 para ver más lento).
+	- `const DEFAULT_SLOW_MO = 300;` → milisegundos entre acciones.
 - Si prefieres no editar el archivo, también puedes sobreescribir solo `SLOW_MO` temporalmente mediante variable de entorno:
 ```powershell
 $env:SLOW_MO='500'
-npm.cmd test -- features/login.feature
+npm test -- features/login.feature
 Remove-Item Env:\SLOW_MO
 ```
 Notas
 - `Set-ExecutionPolicy` se ejecuta una sola vez por usuario; no es necesario repetirlo en cada sesión.
--  Se dejara en modo `HEADLESS_MODE = false` en `hooks.js` para que la UI aparezca por defecto.
+- El proyecto ya está migrado a TypeScript y usa la estructura bajo `src/`.
+- Los reportes se generan en la carpeta `reports/` ubicada en la raíz del proyecto.
 
 Credenciales de prueba
 - `standard_user` / `secret_sauce`
 - `locked_out_user` / `secret_sauce`
 
 Estructura principal
-- `features/` - archivos `.feature` y `steps`
-- `pages/` - Page Objects (POM)
-- `features/support` - hooks y configuración
+- `features/` - archivos `.feature`
+- `src/pages/` - Page Objects (POM)
+- `src/steps/` - steps de Cucumber
+- `src/support/` - hooks y configuración
 
 Informe
 - Archivo `INFORME.md` en la raíz con un breve informe sobre la estrategia de automatización y los patrones usados.

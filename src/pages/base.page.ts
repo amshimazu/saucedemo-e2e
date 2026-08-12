@@ -1,9 +1,11 @@
-class BasePage {
-  constructor(page) {
+export default class BasePage {
+  page: any;
+
+  constructor(page: any) {
     this.page = page;
   }
 
-  async goto(path) {
+  async goto(path: string) {
     await this.page.goto(path);
   }
 
@@ -16,5 +18,3 @@ class BasePage {
     }
   }
 }
-
-module.exports = BasePage;

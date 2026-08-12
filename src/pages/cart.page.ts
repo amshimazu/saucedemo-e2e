@@ -1,7 +1,11 @@
-const BasePage = require('./base.page');
+import BasePage from './base.page';
 
-class CartPage extends BasePage {
-  constructor(page) {
+export default class CartPage extends BasePage {
+  cartItem: string;
+  cartUrl: string;
+  checkoutButton: string;
+
+  constructor(page: any) {
     super(page);
     this.cartItem = '.cart_item';
     this.cartUrl = 'https://www.saucedemo.com/cart.html';
@@ -15,7 +19,7 @@ class CartPage extends BasePage {
 
   async getCartItems() {
     await this.page.waitForSelector(this.cartItem);
-    const items = await this.page.$$eval('.cart_item .inventory_item_name', els => els.map(e => e.textContent.trim()));
+    const items = await this.page.$$eval('.cart_item .inventory_item_name', (els: any[]) => els.map((e: any) => e.textContent.trim()));
     return items;
   }
 
@@ -23,5 +27,3 @@ class CartPage extends BasePage {
     await this.page.click(this.checkoutButton);
   }
 }
-
-module.exports = CartPage;
