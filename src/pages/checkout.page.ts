@@ -1,35 +1,36 @@
+import { Locator, Page } from 'playwright';
 import BasePage from './base.page';
 
 export default class CheckoutPage extends BasePage {
-  firstName: string;
-  lastName: string;
-  postalCode: string;
-  continueButton: string;
-  finishButton: string;
-  completeHeader: string;
+  readonly firstNameInput: Locator;
+  readonly lastNameInput: Locator;
+  readonly postalCodeInput: Locator;
+  readonly continueButton: Locator;
+  readonly finishButton: Locator;
+  readonly completeHeader: Locator;
 
-  constructor(page: any) {
+  constructor(page: Page) {
     super(page);
-    this.firstName = '[data-test="firstName"]';
-    this.lastName = '[data-test="lastName"]';
-    this.postalCode = '[data-test="postalCode"]';
-    this.continueButton = '[data-test="continue"]';
-    this.finishButton = '[data-test="finish"]';
-    this.completeHeader = '.complete-header';
+    this.firstNameInput = page.locator('[data-test="firstName"]');
+    this.lastNameInput = page.locator('[data-test="lastName"]');
+    this.postalCodeInput = page.locator('[data-test="postalCode"]');
+    this.continueButton = page.locator('[data-test="continue"]');
+    this.finishButton = page.locator('[data-test="finish"]');
+    this.completeHeader = page.locator('.complete-header');
   }
 
-  async fillCheckoutInfo(first: string, last: string, zip: string) {
-    await this.page.fill(this.firstName, first);
-    await this.page.fill(this.lastName, last);
-    await this.page.fill(this.postalCode, zip);
-    await this.page.click(this.continueButton);
-    await this.page.click(this.finishButton);
+  async fillCheckoutInfo(first: string, last: string, zip: string): Promise<void> {
+    await this.firstNameInput.fill(first);
+    await this.lastNameInput.fill(last);
+    await this.postalCodeInput.fill(zip);
+    await this.continueButton.click();
+    await this.finishButton.click();
   }
 
-  async isOrderComplete() {
+  async isOrderComplete(): Promise<boolean> {
     try {
-      await this.page.waitForSelector(this.completeHeader, { timeout: 5000 });
-      const txt = await this.page.textContent(this.completeHeader);
+      await this.completeHeader.waitFor({ timeout: 5000 });
+      const txt = await this.completeHeader.textContent();
       return !!(txt && txt.trim().length > 0);
     } catch (e) {
       return false;

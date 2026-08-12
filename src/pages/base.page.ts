@@ -1,7 +1,9 @@
-export default class BasePage {
-  page: any;
+import { Page } from 'playwright';
 
-  constructor(page: any) {
+export default class BasePage {
+  readonly page: Page;
+
+  constructor(page: Page) {
     this.page = page;
   }
 

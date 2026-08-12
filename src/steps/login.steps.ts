@@ -12,17 +12,6 @@ When('inicio sesión con {string} y {string}', async function (username: string,
   await this.loginPage.login(username, password);
 });
 
-Then('debería ver la página de productos', async function () {
-  this.productsPage = new ProductsPage(this.page);
-  const title = await this.productsPage.getTitle();
-  expect(title).to.equal('Products');
-});
-
-Then('debería ver un mensaje de error', async function () {
-  const error = await this.loginPage.getError();
-  expect(error).to.not.be.empty;
-});
-
 Then('debería ver {string}', async function (expectedResult: string) {
   const normalized = expectedResult.trim().toLowerCase();
 

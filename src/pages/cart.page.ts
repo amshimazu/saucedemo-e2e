@@ -1,29 +1,30 @@
+import { Locator, Page } from 'playwright';
 import BasePage from './base.page';
 
 export default class CartPage extends BasePage {
-  cartItem: string;
-  cartUrl: string;
-  checkoutButton: string;
+  readonly cartItem: Locator;
+  readonly cartUrl = 'https://www.saucedemo.com/cart.html';
+  readonly checkoutButton: Locator;
+  readonly cartItemNames: Locator;
 
-  constructor(page: any) {
+  constructor(page: Page) {
     super(page);
-    this.cartItem = '.cart_item';
-    this.cartUrl = 'https://www.saucedemo.com/cart.html';
-    this.checkoutButton = '[data-test="checkout"]';
+    this.cartItem = page.locator('.cart_item');
+    this.checkoutButton = page.locator('[data-test="checkout"]');
+    this.cartItemNames = page.locator('.cart_item .inventory_item_name');
   }
 
-  async open() {
+  async open(): Promise<void> {
     await this.goto(this.cartUrl);
-    await this.page.waitForSelector(this.cartItem);
+    await this.cartItem.waitFor();
   }
 
-  async getCartItems() {
-    await this.page.waitForSelector(this.cartItem);
-    const items = await this.page.$$eval('.cart_item .inventory_item_name', (els: any[]) => els.map((e: any) => e.textContent.trim()));
-    return items;
+  async getCartItems(): Promise<string[]> {
+    await this.cartItem.waitFor();
+    return await this.cartItemNames.allTextContents();
   }
 
-  async checkout() {
-    await this.page.click(this.checkoutButton);
+  async checkout(): Promise<void> {
+    await this.checkoutButton.click();
   }
 }

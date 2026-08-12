@@ -1,35 +1,35 @@
+import { Locator, Page } from 'playwright';
 import BasePage from './base.page';
 
 export default class LoginPage extends BasePage {
-  url: string;
-  username: string;
-  password: string;
-  loginButton: string;
-  error: string;
+  readonly url = 'https://www.saucedemo.com/';
+  readonly usernameInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly errorMessage: Locator;
 
-  constructor(page: any) {
+  constructor(page: Page) {
     super(page);
-    this.url = 'https://www.saucedemo.com/';
-    this.username = '#user-name';
-    this.password = '#password';
-    this.loginButton = '#login-button';
-    this.error = '[data-test="error"]';
+    this.usernameInput = page.locator('#user-name');
+    this.passwordInput = page.locator('#password');
+    this.loginButton = page.locator('#login-button');
+    this.errorMessage = page.locator('[data-test="error"]');
   }
 
-  async open() {
+  async open(): Promise<void> {
     await this.goto(this.url);
   }
 
-  async login(user: string, pass: string) {
-    await this.page.fill(this.username, user);
-    await this.page.fill(this.password, pass);
-    await this.page.click(this.loginButton);
+  async login(user: string, pass: string): Promise<void> {
+    await this.usernameInput.fill(user);
+    await this.passwordInput.fill(pass);
+    await this.loginButton.click();
   }
 
-  async getError() {
+  async getError(): Promise<string> {
     try {
-      await this.page.waitForSelector(this.error, { timeout: 3000 });
-      return await this.page.textContent(this.error);
+      await this.errorMessage.waitFor({ timeout: 3000 });
+      return (await this.errorMessage.textContent())?.trim() ?? '';
     } catch (e) {
       return '';
     }

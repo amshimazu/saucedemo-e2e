@@ -1,36 +1,32 @@
+import { Locator, Page } from 'playwright';
 import BasePage from './base.page';
 
 export default class ProductsPage extends BasePage {
-  title: string;
-  inventoryItem: string;
-  cartLink: string;
+  readonly title: Locator;
+  readonly inventoryItems: Locator;
+  readonly cartLink: Locator;
 
-  constructor(page: any) {
+  constructor(page: Page) {
     super(page);
-    this.title = '.title';
-    this.inventoryItem = '.inventory_item';
-    this.cartLink = '.shopping_cart_link';
+    this.title = page.locator('.title');
+    this.inventoryItems = page.locator('.inventory_item');
+    this.cartLink = page.locator('.shopping_cart_link');
   }
 
-  async getTitle() {
-    await this.page.waitForSelector(this.title);
-    return (await this.page.textContent(this.title)).trim();
+  async getTitle(): Promise<string> {
+    await this.title.waitFor();
+    return (await this.title.textContent())?.trim() ?? '';
   }
 
-  async addToCart(productName: string) {
-    const items = await this.page.$$(this.inventoryItem);
-    for (const item of items) {
-      const name = await item.$eval('.inventory_item_name', (el: any) => el.textContent.trim());
-      if (name === productName) {
-        const btn = await item.$('button');
-        await btn.click();
-        return;
-      }
+  async addToCart(productName: string): Promise<void> {
+    const productCard = this.inventoryItems.filter({ hasText: productName });
+    if ((await productCard.count()) === 0) {
+      throw new Error(`Product not found: ${productName}`);
     }
-    throw new Error(`Product not found: ${productName}`);
+    await productCard.locator('button').click();
   }
 
-  async openCart() {
-    await this.page.click(this.cartLink);
+  async openCart(): Promise<void> {
+    await this.cartLink.click();
   }
 }
